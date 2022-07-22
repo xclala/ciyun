@@ -1,8 +1,9 @@
 try:
     from wordcloud import WordCloud
-    from jieba import lcut
+    from jieba import lcut,setLogLevel
     from win32ui import CreateFileDialog
     from win32con import OFN_OVERWRITEPROMPT, OFN_FILEMUSTEXIST
+    from progress.bar import Bar
     file_open_type = 'All File(*.*)|*.*|''|'
     d = CreateFileDialog(1, None, None,
                             OFN_OVERWRITEPROMPT | OFN_FILEMUSTEXIST,
@@ -11,13 +12,24 @@ try:
     d.DoModal()
     path = d.GetPathName()
     encoding = input("字符编码：")
+    bar = Bar('生成中', max=7)
     if not encoding:
         encoding = "utf-8"
+    bar.next()
     with open(path, "r", encoding=encoding) as f:
         m = f.read()
+        bar.next()
     w = WordCloud(height=1000, width=1900, stopwords={"的", "和", "与"}, font_path=r"msyh.ttc")
-    w.generate(" ".join(lcut(m)))
+    bar.next()
+    setLogLevel(60)
+    bar.next()
+    m = " ".join(lcut(m))
+    bar.next()
+    w.generate(m)
+    bar.next()
     w.to_file("output.png")
+    bar.next()
+    bar.finish()
     print("已生成output.png")
 except Exception as e:
     print(e)
