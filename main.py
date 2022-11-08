@@ -1,7 +1,8 @@
 from wordcloud import WordCloud
-from jieba import lcut,setLogLevel
+from jieba import lcut
 from tkinter import *
 from tkinter.filedialog import askopenfile
+from time import time
 import tkinter.ttk
 
 try:
@@ -14,12 +15,15 @@ except (UnicodeEncodeError, UnicodeDecodeError):
 except Exception as e:
     print(e)
 try:
+    start_time = time()
     root = Tk()
-    bar = tkinter.ttk.Progressbar(root, length=200)
+    bar = tkinter.ttk.Progressbar(root, length=300)
     bar.pack(side=TOP)
     bar['maximum'] = 100
-    w = WordCloud(height=1000, width=1900, stopwords={"的", "和", "与", "-", "——", "|", "_"}, font_path=r"msyh.ttc")
-    setLogLevel(60)
+    w = WordCloud(height=1000,
+                  width=1900,
+                  stopwords={"的", "和", "与", "-", "——", "|", "_"},
+                  font_path=r"msyh.ttc")
     bar['value'] = 25
     root.update()
     m = " ".join(lcut(m))
@@ -31,7 +35,8 @@ try:
     w.to_file("output.png")
     bar['value'] = 100
     root.update()
-    Label(root, text="已生成output.png").pack(side=BOTTOM)
+    Label(root, text=f"用时{round(time() - start_time, 1)}秒，已生成output.png").pack(
+        side=BOTTOM)
     mainloop()
 except Exception as e:
     print(e)
