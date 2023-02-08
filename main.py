@@ -5,8 +5,19 @@ from tkinter.filedialog import askopenfile
 from time import time
 import tkinter.ttk
 
+
+def encoding(filepath):
+    try:
+        from chardet import detect
+        data = open(filepath, "rb").read()
+        encoding = detect(data)["encoding"]
+    except FileNotFoundError:
+        encoding = "utf-8"
+    return encoding
+
+
 try:
-    with askopenfile() as f:
+    with askopenfile(encoding=encoding()) as f:
         m = f.read()
 except ValueError:
     print("文件无法创建词云。")
