@@ -21,8 +21,6 @@ try:
         m = f.read()
 except ValueError:
     print("文件无法创建词云。")
-except (UnicodeEncodeError, UnicodeDecodeError):
-    print("文件编码错误，本程序只支持utf-8。")
 except Exception as e:
     print(e)
 try:
